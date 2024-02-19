@@ -17,9 +17,9 @@ form {
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    padding: 40px;
     margin: 20px auto;
-    max-width: 600px;
+    max-width: 800px;
 }
 
 .post p {
@@ -37,15 +37,15 @@ form {
 }
 
 .fab-form {
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 20px;
 }
 
 .fab-button {
     background-color: transparent;
-    color: #007bff;
-    border: 2px solid #007bff;
+    color: #000000;
+    border: 2px solid #030303;
     border-radius: 50%;
     width: 60px;
     height: 60px;
@@ -55,11 +55,10 @@ form {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;}
 
 .fab-button:hover {
-    background-color: #007bff;
+    background-color: #080808;
     color: #fff;
 }
 
