@@ -9,8 +9,10 @@
 </head>
 <body>
     <h1>Random Post</h1>
-    <form action="/generate_random_post" method="post" style="position: absolute; top: 10px; right: 10px;">
-        <input type="submit" value="Generate Random Post">
+    <form action="/generate_random_post" method="post" class="fab-form">
+        <button type="submit" class="fab-button">
+            <span class="fab-icon">+</span>
+        </button>
     </form>
     <div class="post">
         <p>{{.Text}}</p>

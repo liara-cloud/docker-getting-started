@@ -35,3 +35,34 @@ form {
     margin-top: 10px;
     border-radius: 5px;
 }
+
+.fab-form {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.fab-button {
+    background-color: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.fab-button:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.fab-icon {
+    margin-right: 2px;
+}
