@@ -5,12 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random Post</title>
+    <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
     <h1>Random Post</h1>
-    <div>
+    <form action="/generate_random_post" method="post" style="position: absolute; top: 10px; right: 10px;">
+        <input type="submit" value="Generate Random Post">
+    </form>
+    <div class="post">
         <p>{{.Text}}</p>
-        <img src="uploads/{{.ImageURL}}" alt="Random Image">
+        <img src="static/uploads/{{.ImageURL}}" alt="Random Image">
     </div>
 </body>
 </html>

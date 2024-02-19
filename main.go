@@ -35,7 +35,7 @@ func main() {
     http.HandleFunc("/generate_random_post", generateRandomPostHandler)
 
     // Serve static files
-    http.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("uploads"))))
+    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
     // Start server
     port := os.Getenv("PORT")
@@ -121,14 +121,9 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
     }
 
     // Render posts in reverse order
-    for i := len(posts) - 1; i >= 0; i-- {
-        tm.executeTemplate(w, "index.html", posts[i])
+    for _, post := range posts {
+        tm.executeTemplate(w, "index.html", post)
     }
-
-    // Add a button to generate a random post
-    fmt.Fprintf(w, `<form action="/generate_random_post" method="post">
-                    <input type="submit" value="Generate Random Post">
-                </form>`)
 }
 
 func generateRandomPostHandler(w http.ResponseWriter, r *http.Request) {
@@ -137,7 +132,7 @@ func generateRandomPostHandler(w http.ResponseWriter, r *http.Request) {
         CREATE TABLE IF NOT EXISTS random_posts (
             id INT AUTO_INCREMENT PRIMARY KEY,
             text TEXT,
-            image_url VARCHAR(255)
+            image_url TEXT
         ) ENGINE=InnoDB;
     `)
     if err != nil {
@@ -186,7 +181,7 @@ func base64ToPNG(base64String string) (string, error) {
     filename := uuid.New().String() + ".png"
 
     // Save PNG file to uploads directory
-    err = os.WriteFile(filepath.Join("uploads", filename), imageData, 0644)
+    err = os.WriteFile(filepath.Join("static/uploads", filename), imageData, 0644)
     if err != nil {
         return "", err
     }

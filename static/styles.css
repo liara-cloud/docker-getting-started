@@ -1,42 +1,37 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
     margin: 0;
     padding: 0;
+    background-color: #f0f0f0;
 }
 
 h1 {
     text-align: center;
-    color: #333;
 }
 
-.container {
-    width: 80%;
-    margin: auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+form {
+    margin-top: 20px;
 }
 
 .post {
-    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    margin: 20px auto;
+    max-width: 600px;
 }
 
 .post p {
-    margin-bottom: 10px;
     font-size: 16px;
-    line-height: 1.6;
+    line-height: 1.5;
+    color: #333;
 }
 
 .post img {
+    display: block;
     max-width: 100%;
     height: auto;
-    display: block;
-    margin: 0 auto;
-    border-radius: 4px;
+    margin-top: 10px;
+    border-radius: 5px;
 }
