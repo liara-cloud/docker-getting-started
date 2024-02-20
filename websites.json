@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Fisrt Page",
+        "url": "https://www.example.com"
+    },
+    {
+        "name": "Second Page",
+        "url": "https://www.example.org"
+    },
+    {
+        "name": "Third Page",
+        "url": "https://www.example.net"
+    }
+]
