@@ -6,31 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random Post</title>
     <link rel="stylesheet" href="static/styles.css">
-    <style>
-
-        .fab-form:nth-child(1) {
-            top: 20px;
-            right: 20px;
-        }
-
-        .fab-form:nth-child(2) {
-            top: 100px; 
-            right: 20px;
-        }
-    </style>
 </head>
 <body>
-    
-    <form action="/generate_random_post" method="post" class="fab-form">
-        <button type="submit" class="fab-button">
-            <span class="fab-icon">+</span>
-        </button>
-    </form>
-    <form action="/send-python-request" method="post" class="fab-form">
-        <button type="submit" class="fab-button">
-            <span>SEND</span>
-        </button>
-    </form>
+    <div class="fab-container">
+        <form action="/generate_random_post" method="post" class="fab-form">
+            <button type="submit" class="fab-button">
+                <span class="fab-icon">+</span>
+            </button>
+        </form>
+        <form action="/send-python-request" method="post" class="fab-form">
+            <button type="submit" class="fab-button">
+                <span>REQ</span>
+            </button>
+        </form>
+    </div>
     <div class="post">
         <p>{{.Text}}</p>
         <img src="static/uploads/{{.ImageURL}}" alt="Random Image">

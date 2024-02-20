@@ -5,12 +5,43 @@ body {
     background-color: #f0f0f0;
 }
 
-h1 {
-    text-align: center;
+.fab-container {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 20px;
+    right: 20px;
 }
 
-form {
-    margin-top: 20px;
+.fab-form {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.fab-button {
+    background-color: transparent;
+    color: #000000;
+    border: 2px solid #030303;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    font-size: 24px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.fab-button:hover {
+    background-color: #080808;
+    color: #fff;
+}
+
+.fab-icon {
+    margin-right: 2px;
 }
 
 .post {
@@ -34,34 +65,4 @@ form {
     height: auto;
     margin-top: 10px;
     border-radius: 5px;
-}
-
-.fab-form {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-}
-
-.fab-button {
-    background-color: transparent;
-    color: #000000;
-    border: 2px solid #030303;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    font-size: 24px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;}
-
-.fab-button:hover {
-    background-color: #080808;
-    color: #fff;
-}
-
-.fab-icon {
-    margin-right: 2px;
 }
