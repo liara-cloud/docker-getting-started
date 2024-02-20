@@ -33,6 +33,8 @@ func main() {
 	// Handle routes
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/generate_random_post", generateRandomPostHandler)
+	http.HandleFunc("/send-python-request", sendPythonRequestHandler)
+
 
 	// Serve static files
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
@@ -209,4 +211,17 @@ func base64ToPNG(base64String string) (string, error) {
 	}
 
 	return filename, nil
+}
+
+func sendPythonRequestHandler(w http.ResponseWriter, r *http.Request) {
+    _, err := http.Get("http://python-script:80/run")
+    if err != nil {
+        fmt.Println("Error sending request to Python script:", err)
+        http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+        return
+    }
+
+    // Send JavaScript code to display a message box
+    fmt.Fprintf(w, `<script>alert("Request sent successfully");</script>`)
+    http.Redirect(w, r, "/", http.StatusSeeOther)
 }
