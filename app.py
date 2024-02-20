@@ -1,5 +1,6 @@
 import json
 import base64
+import time  # برای استفاده از توقف
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
@@ -7,7 +8,6 @@ from selenium.webdriver.chrome.options import Options
 import mysql.connector
 import logging
 from http.server import BaseHTTPRequestHandler, HTTPServer
-
 
 # Configure logging to display messages in terminal
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -22,9 +22,23 @@ chrome_options.set_capability('browserless:token', '0iUMlmDN_NB6YWDQ1RF')
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--headless")
 
-driver = webdriver.Remote(
-    command_executor='https://headless.liara.run/webdriver',
-    options=chrome_options)
+# Function to create WebDriver once it's connected
+def create_webdriver():
+    try:
+        driver = webdriver.Remote(
+            command_executor='https://headless.liara.run/webdriver',
+            options=chrome_options)
+        logging.info("WebDriver connected successfully.")
+        return driver
+    except Exception as e:
+        logging.error(f"Error connecting to WebDriver: {str(e)}")
+        return None
+
+# Try to connect to WebDriver
+driver = None
+while not driver:
+    driver = create_webdriver()
+    time.sleep(1)  # تاخیر 1 ثانیه برای اتصال
 
 # Connect to MariaDB
 db_connection = mysql.connector.connect(
@@ -36,7 +50,6 @@ db_connection = mysql.connector.connect(
 )
 db_cursor = db_connection.cursor()
 
-
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/run":
@@ -44,9 +57,9 @@ class RequestHandler(BaseHTTPRequestHandler):
             logging.info(f"Be Happy! Script is running...")
             check_table()
             take_and_save_screenshots()
-            db_cursor.close()
-            db_connection.close()
-            driver.quit()
+            # db_cursor.close()
+            # db_connection.close()
+            # driver.quit()
             logging.info(f"All done! Time to rest.")
 
             # Send a response to indicate the script has been executed
