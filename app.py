@@ -1,6 +1,5 @@
 import json
 import base64
-import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
@@ -86,3 +85,11 @@ def take_and_save_screenshots():
     except Exception as e:
         logging.error(f"Error occurred: {str(e)}")
 
+def run(server_class=HTTPServer, handler_class=RequestHandler, host='python-script', port=80):
+    server_address = (host, port)
+    httpd = server_class(server_address, handler_class)
+    logging.info(f'Starting server on {host}:{port}')
+    httpd.serve_forever()
+
+if __name__ == "__main__":
+    run()
