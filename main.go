@@ -221,7 +221,6 @@ func sendPythonRequestHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Send JavaScript code to display a message box
-    fmt.Fprintf(w, `<script>alert("Request sent successfully");</script>`)
-    http.Redirect(w, r, "/", http.StatusSeeOther)
+    // Send JavaScript code to display an alert message and redirect after a delay
+    fmt.Fprintf(w, `<script>alert("Request sent successfully"); setTimeout(function(){ window.location.href = '/'; }, 500);</script>`)
 }
