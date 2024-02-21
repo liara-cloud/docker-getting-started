@@ -34,6 +34,7 @@ func main() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/generate_random_post", generateRandomPostHandler)
 	http.HandleFunc("/send-python-request", sendPythonRequestHandler)
+	http.HandleFunc("/send-nodejs-request", sendNodeJSRequestHandler)
 
 
 	// Serve static files
@@ -217,6 +218,18 @@ func sendPythonRequestHandler(w http.ResponseWriter, r *http.Request) {
     _, err := http.Get("http://python-script:80/run")
     if err != nil {
         fmt.Println("Error sending request to Python script:", err)
+        http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+        return
+    }
+
+    // Send JavaScript code to display an alert message and redirect after a delay
+    fmt.Fprintf(w, `<script>alert("Request sent successfully"); setTimeout(function(){ window.location.href = '/'; }, 500);</script>`)
+}
+
+func sendNodeJSRequestHandler(w http.ResponseWriter, r *http.Request) {
+    _, err := http.Get("http://nodejs-paragraph:3000/run")
+    if err != nil {
+        fmt.Println("Error sending request to RUST script:", err)
         http.Error(w, "Internal Server Error", http.StatusInternalServerError)
         return
     }
