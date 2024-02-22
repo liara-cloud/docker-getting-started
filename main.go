@@ -11,11 +11,12 @@ import (
 	"path/filepath"
 	"strconv"
 	"os/exec"
+	"strings"
 
-	  "github.com/go-gomail/gomail"
+	"github.com/go-gomail/gomail"
+	"github.com/google/uuid"
+	"github.com/joho/godotenv"
 	_ "github.com/go-sql-driver/mysql"
-	  "github.com/google/uuid"
-	  "github.com/joho/godotenv"
 )
 
 var db *sql.DB
@@ -27,27 +28,21 @@ type Post struct {
 }
 
 func main() {
-	// Initialize template manager
+	
 	tm = newTemplateManager()
-
 	loadEnv()
 
-	// Open database connection
 	db = connectDB()
 	defer db.Close()
 
-	// Handle routes
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/generate_random_post", generateRandomPostHandler)
 	http.HandleFunc("/send-python-request", sendPythonRequestHandler)
 	http.HandleFunc("/send-nodejs-request", sendNodeJSRequestHandler)
 	http.HandleFunc("/send-email", sendEmailHandler)
 
-
-	// Serve static files
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	// Start server
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -74,7 +69,13 @@ func (tm *templateManager) executeTemplate(w http.ResponseWriter, name string, d
 }
 
 func connectDB() *sql.DB {
-	db, err := sql.Open("mysql", "root:seh1iWk2MvRySPWhUHp01m1N@tcp(tai.liara.cloud:30983)/trusting_merkle")
+
+	dsn, err := convertToDSN(os.Getenv("DB_URI"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	
+	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -305,4 +306,38 @@ func createMySQLBackup(db *sql.DB, backupFileName string) error {
 	}
 
 	return nil
+}
+
+func convertToDSN(uri string) (string, error) {
+	parts := strings.Split(uri, "://")
+	if len(parts) != 2 {
+		return "", fmt.Errorf("invalid DSN format")
+	}
+
+	credentialsAndAddress := parts[1]
+	dbParts := strings.Split(credentialsAndAddress, "@")
+	if len(dbParts) != 2 {
+		return "", fmt.Errorf("invalid credentials format")
+	}
+
+	addressAndDB := dbParts[1]
+	credentials := dbParts[0]
+
+	usernamePassword := strings.Split(credentials, ":")
+	if len(usernamePassword) != 2 {
+		return "", fmt.Errorf("invalid username/password format")
+	}
+
+	username := usernamePassword[0]
+	password := usernamePassword[1]
+
+	addressDBParts := strings.Split(addressAndDB, "/")
+	if len(addressDBParts) != 2 {
+		return "", fmt.Errorf("invalid address/database format")
+	}
+
+	address := addressDBParts[0]
+	dbName := addressDBParts[1]
+
+	return fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, address, dbName), nil
 }
