@@ -9,9 +9,13 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
+	"os/exec"
 
+	  "github.com/go-gomail/gomail"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/google/uuid"
+	  "github.com/google/uuid"
+	  "github.com/joho/godotenv"
 )
 
 var db *sql.DB
@@ -26,6 +30,8 @@ func main() {
 	// Initialize template manager
 	tm = newTemplateManager()
 
+	loadEnv()
+
 	// Open database connection
 	db = connectDB()
 	defer db.Close()
@@ -35,6 +41,7 @@ func main() {
 	http.HandleFunc("/generate_random_post", generateRandomPostHandler)
 	http.HandleFunc("/send-python-request", sendPythonRequestHandler)
 	http.HandleFunc("/send-nodejs-request", sendNodeJSRequestHandler)
+	http.HandleFunc("/send-email", sendEmailHandler)
 
 
 	// Serve static files
@@ -236,4 +243,61 @@ func sendNodeJSRequestHandler(w http.ResponseWriter, r *http.Request) {
 
     // Send JavaScript code to display an alert message and redirect after a delay
     fmt.Fprintf(w, `<script>alert("Request sent successfully"); setTimeout(function(){ window.location.href = '/'; }, 500);</script>`)
+}
+
+func sendEmailHandler(w http.ResponseWriter, r *http.Request) {
+    if r.Method == http.MethodPost {
+        email := r.FormValue("email")
+		
+		backupFileName := "backup_file.sql"
+		err := createMySQLBackup(db, backupFileName)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		mailPort, err := strconv.Atoi(os.Getenv("MAIL_PORT"))
+    	if err != nil {
+        	fmt.Println("Error converting MAIL_PORT to int:", err)
+        	return
+    	}
+
+		m := gomail.NewMessage()
+		m.SetHeader("From", os.Getenv("MAIL_FROM")) 
+		m.SetHeader("To", email)
+		m.SetHeader("Subject", "Backup of MySQL Database")
+		body := "backup is attached, thanks!"
+		m.SetBody("text/plain", body)
+		m.Attach(backupFileName)
+
+    	d := gomail.NewDialer(os.Getenv("MAIL_HOST"), mailPort, os.Getenv("MAIL_USERNAME"), os.Getenv("MAIL_PASSWORD"))
+		if err := d.DialAndSend(m); err != nil {
+			fmt.Fprintf(w, `<script>alert("Error sending email: %s"); setTimeout(function(){ window.location.href = '/'; }, 500);</script>`, err.Error())
+		} else {
+			fmt.Fprintf(w, `<script>alert("Email sent successfully"); setTimeout(function(){ window.location.href = '/'; }, 500);</script>`)
+		}
+		
+		
+    }
+}
+
+func loadEnv() {
+	err := godotenv.Load(".env")
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func createMySQLBackup(db *sql.DB, backupFileName string) error {
+	cmd := exec.Command("mysqldump", "-u", os.Getenv("MYSQL_USER"), "-p"+os.Getenv("MYSQL_PASSWORD"), "-h", os.Getenv("MYSQL_HOST"), "-P", os.Getenv("MYSQL_PORT"), os.Getenv("MYSQL_DATABASE"))
+	output, err := cmd.Output()
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(backupFileName, output, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
