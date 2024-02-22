@@ -14,6 +14,7 @@
 # Air files
 .air.toml
 tmp
+.env
 
 
 # Go workspace file

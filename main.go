@@ -267,7 +267,7 @@ func sendEmailHandler(w http.ResponseWriter, r *http.Request) {
 		m.SetHeader("Subject", "Backup of MySQL Database")
 		body := "backup is attached, thanks!"
 		m.SetBody("text/plain", body)
-		m.Attach(backupFileName)
+		m.Attach("backups/" + backupFileName)
 
     	d := gomail.NewDialer(os.Getenv("MAIL_HOST"), mailPort, os.Getenv("MAIL_USERNAME"), os.Getenv("MAIL_PASSWORD"))
 		if err := d.DialAndSend(m); err != nil {
@@ -288,13 +288,18 @@ func loadEnv() {
 }
 
 func createMySQLBackup(db *sql.DB, backupFileName string) error {
-	cmd := exec.Command("mysqldump", "-u", os.Getenv("MYSQL_USER"), "-p"+os.Getenv("MYSQL_PASSWORD"), "-h", os.Getenv("MYSQL_HOST"), "-P", os.Getenv("MYSQL_PORT"), os.Getenv("MYSQL_DATABASE"))
+	cmd := exec.Command("mysqldump", "-u", os.Getenv("DB_USER"), "-p"+os.Getenv("DB_PASS"), "-h", os.Getenv("DB_HOST"), "-P", os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
 	output, err := cmd.Output()
 	if err != nil {
 		return err
 	}
 
-	err = os.WriteFile(backupFileName, output, 0644)
+	err = os.MkdirAll("backups", os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile("backups/"+backupFileName, output, 0644)
 	if err != nil {
 		return err
 	}
