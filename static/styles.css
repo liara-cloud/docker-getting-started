@@ -20,10 +20,10 @@ body {
 }
 
 .fab-button {
-    background-color: transparent;
-    color: #000000;
-    border: 2px solid #030303;
-    border-radius: 50%;
+    background-color: #686868;
+    color: #ffffff; 
+    border: 2px solid #686868; 
+    border-radius: 15px; 
     width: 100%;
     height: 100%;
     font-size: 18px;
@@ -36,13 +36,14 @@ body {
 }
 
 .fab-button:hover {
-    background-color: #080808;
+    background-color: #000000;
     color: #fff;
 }
 
 .fab-icon {
     margin-right: 2px;
 }
+
 
 .post {
     background-color: #fff;
@@ -67,7 +68,6 @@ body {
     border-radius: 5px;
 }
 
-/* CSS for modal */
 .modal {
     display: none;
     position: fixed;
@@ -82,28 +82,27 @@ body {
 
 .modal-content {
     background-color: #ffffff;
-    margin: 5% auto; /* changed margin for better positioning */
-    padding: 30px; /* increased padding for better spacing */
-    border-radius: 15px; /* increased border-radius for smoother corners */
-    max-width: 800px; /* increased max-width for larger modals */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* increased box-shadow for better depth */
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 15px; 
+    max-width: 800px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
 }
 
 .close {
-    color: #555555; /* changed close button color */
+    color: #555555;
     float: right;
-    font-size: 30px; /* increased close button font size */
+    font-size: 30px;
     font-weight: bold;
     cursor: pointer;
 }
 
 .close:hover,
 .close:focus {
-    color: #000000; /* changed close button hover color */
+    color: #000000;
     text-decoration: none;
 }
 
-/* CSS for input and send button */
 .email-form input[type="email"] {
     width: 100%;
     padding: 10px;
