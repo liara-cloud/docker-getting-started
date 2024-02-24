@@ -30,7 +30,10 @@ type Post struct {
 func main() {
 	
 	tm = newTemplateManager()
-	loadEnv()
+
+	if os.Getenv("ENV")!="production" {
+		loadEnv()
+	}
 
 	db = connectDB()
 	defer db.Close()
