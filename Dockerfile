@@ -13,6 +13,9 @@ RUN go mod download
 # Build the Go application
 RUN go build -o main .
 
+# Install mysqldump
+RUN apt-get update && apt-get install -y default-mysql-client
+
 # Expose port 8080 to the outside world
 # EXPOSE 8080
 

@@ -265,7 +265,7 @@ func sendEmailHandler(w http.ResponseWriter, r *http.Request) {
 		m := gomail.NewMessage()
 		m.SetHeader("From", os.Getenv("MAIL_FROM")) 
 		m.SetHeader("To", email)
-		m.SetHeader("Subject", "Backup of MySQL Database")
+		m.SetHeader("Subject", "Backup of MySQL/MariaDB Database")
 		body := "backup is attached, thanks!"
 		m.SetBody("text/plain", body)
 		m.Attach("backups/" + backupFileName)
