@@ -1,6 +1,5 @@
 import json
 import base64
-import time 
 from selenium import webdriver
 import mysql.connector
 import logging
@@ -17,9 +16,9 @@ class RequestHandler(BaseHTTPRequestHandler):
             driver, websites         = pre_process()
             db_cursor, db_connection = db_conf()
             take_and_save_screenshots(websites, driver, db_cursor, db_connection)
-            # db_cursor.close()
-            # db_connection.close()
-            # driver.quit()
+            db_cursor.close()
+            db_connection.close()
+            driver.quit()
             logging.info(f"All done! Time to rest.")
 
             # Send a response to indicate the script has been executed
