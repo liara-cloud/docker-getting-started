@@ -226,7 +226,7 @@ func base64ToPNG(base64String string) (string, error) {
 }
 
 func sendPythonRequestHandler(w http.ResponseWriter, r *http.Request) {
-    _, err := http.Get("http://python-script:80/run")
+    _, err := http.Get("http://" + os.Getenv("PYTHON_NAME") + ":" + os.Getenv("PYTHON_PORT") + "/run")
     if err != nil {
         fmt.Println("Error sending request to Python script:", err)
         http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -238,7 +238,7 @@ func sendPythonRequestHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func sendNodeJSRequestHandler(w http.ResponseWriter, r *http.Request) {
-    _, err := http.Get("http://nodejs-paragraph:3000/run")
+    _, err := http.Get("http://" + os.Getenv("NODEJS_NAME") + ":" + os.Getenv("NODEJS_PORT") + "/run")
     if err != nil {
         fmt.Println("Error sending request to RUST script:", err)
         http.Error(w, "Internal Server Error", http.StatusInternalServerError)
