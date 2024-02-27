@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/go-gomail/gomail"
 	"github.com/google/uuid"
@@ -250,38 +251,39 @@ func sendNodeJSRequestHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func sendEmailHandler(w http.ResponseWriter, r *http.Request) {
-    if r.Method == http.MethodPost {
-        email := r.FormValue("email")
-		
-		backupFileName := "backup_file.sql"
+	if r.Method == http.MethodPost {
+		email := r.FormValue("email")
+
+		// Generate a unique filename based on timestamp
+		timestamp := time.Now().Format("2006-01-02_15-04-05")
+		backupFileName := fmt.Sprintf("backup_file_%s.sql", timestamp)
+
 		err := createMySQLBackup(db, backupFileName)
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		mailPort, err := strconv.Atoi(os.Getenv("MAIL_PORT"))
-    	if err != nil {
-        	fmt.Println("Error converting MAIL_PORT to int:", err)
-        	return
-    	}
+		if err != nil {
+			fmt.Println("Error converting MAIL_PORT to int:", err)
+			return
+		}
 
 		m := gomail.NewMessage()
-		m.SetHeader("From", os.Getenv("MAIL_FROM")) 
+		m.SetHeader("From", os.Getenv("MAIL_FROM"))
 		m.SetHeader("To", email)
 		m.SetHeader("Subject", "Backup of MySQL/MariaDB Database")
-		body := "backup is attached, thanks!"
+		body := "Backup is attached, thanks!"
 		m.SetBody("text/plain", body)
 		m.Attach("backups/" + backupFileName)
 
-    	d := gomail.NewDialer(os.Getenv("MAIL_HOST"), mailPort, os.Getenv("MAIL_USERNAME"), os.Getenv("MAIL_PASSWORD"))
+		d := gomail.NewDialer(os.Getenv("MAIL_HOST"), mailPort, os.Getenv("MAIL_USERNAME"), os.Getenv("MAIL_PASSWORD"))
 		if err := d.DialAndSend(m); err != nil {
 			fmt.Fprintf(w, `<script>alert("Error sending email: %s"); setTimeout(function(){ window.location.href = '/'; }, 500);</script>`, err.Error())
 		} else {
 			fmt.Fprintf(w, `<script>alert("Email sent successfully"); setTimeout(function(){ window.location.href = '/'; }, 500);</script>`)
 		}
-		
-		
-    }
+	}
 }
 
 func loadEnv() {
