@@ -1,23 +1,15 @@
-# Docker apps getting started
-## Installation
-```bash
-$ git clone https://github.com/liara-cloud/docker-getting-started.git
+# Docker Apps getting started
 
-$ cd docker-getting-started
+A simple go project that can be deployed by docker-app on Liara. Notice that now Liara provides [go-platform](https://liara.ir/landing/%D9%87%D8%A7%D8%B3%D8%AA-%DA%AF%D9%88%D9%84%D9%86%DA%AF-golang/) and you can use it for deploying golang projects
+and this repo is archived.
 
-$ mv .env.example .env # or rename .env.example to .env
+## Deployment
 
-# set your ENVs
+- Create new [docker app](https://console.liara.ir/apps/create) & install [Liara CLI](https://docs.liara.ir/cli/install)
+- Set ENVs in `.env.example` on the docker app
+- Clone this repo by `git clone https://github.com/liara-cloud/docker-go-getting-started.git`
+- Navigate to `docker-go-getting-started` dir
+- Deploy app using command `liara deploy --platform docker --port 8080`
 
-$ go run main.go
-```
-
-### if you need to live reload, you can use air:
-```bash
-$
-$
-$ 
-```
-
-[Create New Docker App](https://console.liara.ir/apps/create) & install the [Liara CLI](https://docs.liara.ir/cli/install)
+And ... that's it. you can enjoy your app!
 
