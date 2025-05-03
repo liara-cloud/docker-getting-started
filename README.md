@@ -1,4 +1,4 @@
-# Docker Apps getting started
+# Docker apps getting started
 
 A simple go project that can be deployed by docker-app on Liara. Notice that now Liara provides [go-platform](https://liara.ir/landing/%D9%87%D8%A7%D8%B3%D8%AA-%DA%AF%D9%88%D9%84%D9%86%DA%AF-golang/) and you can use it for deploying golang projects
 and this repo is archived.
